@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'checkstyle'
+    id 'org.jenkins-ci.jpi' version '0.21.0'
+}
+
+group = 'io.triglav.jenkins'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.7
+targetCompatibility = 1.7
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+jenkinsPlugin {
+    // see. https://github.com/jenkinsci/gradle-jpi-plugin
+    coreVersion = '1.581'
+    shortName = 'jenkins-trigger-polling_triglav'
+    displayName = 'Triglav Polling Trigger Plugin built with Gradle'
+    url = 'https://github.com/civitaspo/jenkins-trigger-polling_triglav'
+    gitHubUrl = 'https://github.com/civitaspo/jenkins-trigger-polling_triglav'
+    workDir = file('work')
+    localizerOutputDir = "${project.buildDir}/generated-src/localizer"
+    fileExtension = 'hpi'
+
+    developers {
+        developer {
+            id 'civitaspo'
+            name 'Takahiro Nakayama'
+            email 'civitaspo@gmail.com'
+        }
+    }
+}
+
+dependencies {
+    compile project('triglav-client-java')
+    compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.7'
+    testCompile project('triglav-client-java')
+}
+

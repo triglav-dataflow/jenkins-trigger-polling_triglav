@@ -1,0 +1,14 @@
+<?jelly escape-by-default='true'?>
+<j:jelly xmlns:j="jelly:core" xmlns:f="/lib/form">
+  <!--
+    This jelly script is used for per-project configuration.
+
+    See global.jelly for a general discussion about jelly script.
+  -->
+  <f:entry title="Id(ReadOnly)" field="resourceId">
+    <f:readOnlyTextbox value="${it.resourceId}"/>
+  </f:entry>
+  <f:entry title="URI" field="resourceUri">
+    <f:textbox value="${it.resourceUri}"/>
+  </f:entry>
+</j:jelly>

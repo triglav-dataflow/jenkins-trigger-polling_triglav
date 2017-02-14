@@ -1,0 +1,3 @@
+rootProject.name = 'jenkins-trigger-polling_triglav'
+
+include 'triglav-client-java'

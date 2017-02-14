@@ -1,0 +1,3 @@
+[submodule "triglav-client-java"]
+	path = triglav-client-java
+	url = git@github.com:triglav-dataflow/triglav-client-java.git
