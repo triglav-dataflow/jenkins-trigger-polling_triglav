@@ -1,4 +1,4 @@
-package io.triglav.jenkins.trigger.polling_triglav;
+package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
 import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -36,7 +36,7 @@ public class PollingTriglavTriggerRunner
                 PollingTriglavTriggerPoller poller = new PollingTriglavTriggerPoller(parameterWrapper);
                 PollingTriglavTrigger trigger = new PollingTriglavTrigger(jobWrapper, poller);
                 if (trigger.canKick()) {
-                    logger.info(String.format("[%s] Job `%s` is started by io.triglav.jenkins.trigger.polling_triglav", getClass().getName(), job.getDisplayName()));
+                    logger.info(String.format("[%s] Job `%s` is started by io.github.triglav_dataflow.jenkins.trigger.polling_triglav", getClass().getName(), job.getDisplayName()));
                     trigger.kick();
                 }
                 else {

@@ -4,7 +4,7 @@ plugins {
     id 'org.jenkins-ci.jpi' version '0.21.0'
 }
 
-group = 'io.triglav.jenkins'
+group = 'io.github.triglav_dataflow'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.7
 targetCompatibility = 1.7
@@ -17,8 +17,8 @@ jenkinsPlugin {
     coreVersion = '1.581'
     shortName = 'jenkins-trigger-polling_triglav'
     displayName = 'Triglav Polling Trigger Plugin built with Gradle'
-    url = 'https://github.com/civitaspo/jenkins-trigger-polling_triglav'
-    gitHubUrl = 'https://github.com/civitaspo/jenkins-trigger-polling_triglav'
+    url = 'https://github.com/triglav-dataflow/jenkins-trigger-polling_triglav'
+    gitHubUrl = 'https://github.com/triglav-dataflow/jenkins-trigger-polling_triglav'
     workDir = file('work')
     localizerOutputDir = "${project.buildDir}/generated-src/localizer"
     fileExtension = 'hpi'

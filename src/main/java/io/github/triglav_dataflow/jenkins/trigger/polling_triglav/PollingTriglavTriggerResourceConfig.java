@@ -1,4 +1,4 @@
-package io.triglav.jenkins.trigger.polling_triglav;
+package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
@@ -9,8 +9,8 @@ import hudson.model.Describable;
 import hudson.model.Descriptor;
 import hudson.util.ListBoxModel;
 import hudson.util.RobustReflectionConverter;
-import io.triglav.jenkins.trigger.polling_triglav.unit.TimeUnit;
-import io.triglav.jenkins.trigger.polling_triglav.unit.TimeZoneConverter;
+import io.github.triglav_dataflow.jenkins.trigger.polling_triglav.unit.TimeUnit;
+import io.github.triglav_dataflow.jenkins.trigger.polling_triglav.unit.TimeZoneConverter;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.AncestorInPath;

@@ -1,11 +1,11 @@
-package io.triglav.jenkins.trigger.polling_triglav;
+package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-import io.triglav.client.Credential;
-import io.triglav.jenkins.trigger.polling_triglav.unit.TimeZoneConverter;
+import io.github.triglav_dataflow.client.Credential;
+import io.github.triglav_dataflow.jenkins.trigger.polling_triglav.unit.TimeZoneConverter;
 
 import javax.annotation.Nullable;
 

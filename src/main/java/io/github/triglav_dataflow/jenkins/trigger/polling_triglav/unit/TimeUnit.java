@@ -1,4 +1,4 @@
-package io.triglav.jenkins.trigger.polling_triglav.unit;
+package io.github.triglav_dataflow.jenkins.trigger.polling_triglav.unit;
 
 import java.util.Locale;
 
