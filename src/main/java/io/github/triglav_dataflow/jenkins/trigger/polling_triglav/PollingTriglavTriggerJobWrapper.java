@@ -1,4 +1,4 @@
-package io.triglav.jenkins.trigger.polling_triglav;
+package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
 import com.google.common.collect.Lists;
 import hudson.model.BuildableItem;

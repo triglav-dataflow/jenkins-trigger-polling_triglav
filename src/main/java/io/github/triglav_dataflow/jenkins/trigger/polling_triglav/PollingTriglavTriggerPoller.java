@@ -1,23 +1,23 @@
-package io.triglav.jenkins.trigger.polling_triglav;
+package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
-import io.triglav.client.ApiClient;
-import io.triglav.client.ApiException;
-import io.triglav.client.Configuration;
-import io.triglav.client.Credential;
-import io.triglav.client.JobMessageEachResponse;
-import io.triglav.client.JobRequest;
-import io.triglav.client.JobResponse;
-import io.triglav.client.ResourceRequest;
-import io.triglav.client.ResourceResponse;
-import io.triglav.client.TokenResponse;
-import io.triglav.client.api.AuthApi;
-import io.triglav.client.api.JobMessagesApi;
-import io.triglav.client.api.JobsApi;
-import io.triglav.client.api.ResourcesApi;
+import io.github.triglav_dataflow.client.ApiClient;
+import io.github.triglav_dataflow.client.ApiException;
+import io.github.triglav_dataflow.client.Configuration;
+import io.github.triglav_dataflow.client.Credential;
+import io.github.triglav_dataflow.client.JobMessageEachResponse;
+import io.github.triglav_dataflow.client.JobRequest;
+import io.github.triglav_dataflow.client.JobResponse;
+import io.github.triglav_dataflow.client.ResourceRequest;
+import io.github.triglav_dataflow.client.ResourceResponse;
+import io.github.triglav_dataflow.client.TokenResponse;
+import io.github.triglav_dataflow.client.api.AuthApi;
+import io.github.triglav_dataflow.client.api.JobMessagesApi;
+import io.github.triglav_dataflow.client.api.JobsApi;
+import io.github.triglav_dataflow.client.api.ResourcesApi;
 import org.apache.commons.lang.builder.ToStringBuilder;
 
 import javax.annotation.Nullable;
@@ -64,7 +64,7 @@ public class PollingTriglavTriggerPoller
     private void authenticate()
     {
         if (!params.apiKey().isEmpty()) {
-            synchronized (client) // io.triglav.client.ApiClient#setApiKey is not defined with `synchronized`.
+            synchronized (client) // io.github.triglav_dataflow.client.ApiClient#setApiKey is not defined with `synchronized`.
             {
                 client.setApiKey(params.apiKey());
             }
@@ -76,7 +76,7 @@ public class PollingTriglavTriggerPoller
         try {
             TokenResponse token = new AuthApi(client).createToken(buildCredential());
             params.setApiKey(token.getAccessToken());
-            synchronized (client) // io.triglav.client.ApiClient#setApiKey is not synchronized.
+            synchronized (client) // io.github.triglav_dataflow.client.ApiClient#setApiKey is not synchronized.
             {
                 client.setApiKey(token.getAccessToken());
             }

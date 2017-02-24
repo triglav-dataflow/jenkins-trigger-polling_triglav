@@ -41,7 +41,7 @@
         minimum="1"
     >
       <table width="100%">
-        <st:include page="config.jelly" class="io.triglav.jenkins.trigger.polling_triglav.PollingTriglavTriggerResourceConfig"/>
+        <st:include page="config.jelly" class="io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerResourceConfig"/>
         <f:entry title="">
           <div align="right">
             <f:repeatableDeleteButton/>

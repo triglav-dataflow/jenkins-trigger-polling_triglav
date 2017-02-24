@@ -1,4 +1,4 @@
-package io.triglav.jenkins.trigger.polling_triglav;
+package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
 import antlr.ANTLRException;
 import com.google.common.collect.Lists;
@@ -12,8 +12,8 @@ import hudson.triggers.Trigger;
 import hudson.triggers.TriggerDescriptor;
 import hudson.util.ListBoxModel;
 import hudson.util.RobustReflectionConverter;
-import io.triglav.client.Credential;
-import io.triglav.jenkins.trigger.polling_triglav.unit.TimeUnit;
+import io.github.triglav_dataflow.client.Credential;
+import io.github.triglav_dataflow.jenkins.trigger.polling_triglav.unit.TimeUnit;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
 import org.kohsuke.stapler.DataBoundConstructor;

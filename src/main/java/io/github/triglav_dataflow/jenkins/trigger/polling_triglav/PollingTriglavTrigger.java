@@ -1,18 +1,18 @@
-package io.triglav.jenkins.trigger.polling_triglav;
+package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
 import com.google.common.base.Optional;
-import io.triglav.client.JobMessageEachResponse;
+import io.github.triglav_dataflow.client.JobMessageEachResponse;
 
 import java.util.logging.Logger;
 
 public class PollingTriglavTrigger
 {
-    private static Logger logger = PollingTriglavTriggerPlugin.getLogger();
+    private static Logger logger = io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerPlugin.getLogger();
 
-    private final PollingTriglavTriggerJobWrapper job;
-    private final PollingTriglavTriggerPoller poller;
+    private final io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerJobWrapper job;
+    private final io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerPoller poller;
 
-    public PollingTriglavTrigger(PollingTriglavTriggerJobWrapper job, PollingTriglavTriggerPoller poller)
+    public PollingTriglavTrigger(io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerJobWrapper job, io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerPoller poller)
     {
         this.job = job;
         this.poller = poller;
