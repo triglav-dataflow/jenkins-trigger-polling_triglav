@@ -31,9 +31,9 @@ public class PollingTriglavTriggerRunner
             @Override
             public void run()
             {
-                PollingTriglavTriggerJobWrapper jobWrapper = new PollingTriglavTriggerJobWrapper(job);
-                PollingTriglavTriggerPluginParameterWrapper parameterWrapper = new PollingTriglavTriggerPluginParameterWrapper(plugin);
-                PollingTriglavTriggerPoller poller = new PollingTriglavTriggerPoller(parameterWrapper);
+                JenkinsJob jobWrapper = new JenkinsJob(job);
+                PluginParameter parameterWrapper = new PluginParameter(plugin);
+                TriglavPoller poller = new TriglavPoller(parameterWrapper);
                 PollingTriglavTrigger trigger = new PollingTriglavTrigger(jobWrapper, poller);
                 if (trigger.canKick()) {
                     logger.info(String.format("[%s] Job `%s` is started by io.github.triglav_dataflow.jenkins.trigger.polling_triglav", getClass().getName(), job.getDisplayName()));

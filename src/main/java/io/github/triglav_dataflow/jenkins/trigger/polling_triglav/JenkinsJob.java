@@ -10,12 +10,12 @@ import jenkins.model.Jenkins;
 
 import java.util.List;
 
-public class PollingTriglavTriggerJobWrapper
+public class JenkinsJob
 {
     private final FreeStyleProject job;
     private List<ParameterValue> buildParameters = Lists.newArrayList();
 
-    public PollingTriglavTriggerJobWrapper(BuildableItem job)
+    public JenkinsJob(BuildableItem job)
     {
         this.job = (FreeStyleProject) job;
     }
@@ -40,12 +40,12 @@ public class PollingTriglavTriggerJobWrapper
      * or if the blockBuildWhenUpstreamBuilding option is true and an upstream
      * job is building, but derived classes can also check other conditions.
      */
-    public boolean isJobBuildBlocked()
+    public boolean isBuildBlocked()
     {
         return job.isBuildBlocked();
     }
 
-    public boolean isJobDisabled()
+    public boolean isDisabled()
     {
         return job.isDisabled();
     }

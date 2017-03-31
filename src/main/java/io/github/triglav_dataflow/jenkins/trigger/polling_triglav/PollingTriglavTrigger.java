@@ -9,10 +9,10 @@ public class PollingTriglavTrigger
 {
     private static Logger logger = io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerPlugin.getLogger();
 
-    private final io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerJobWrapper job;
-    private final io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerPoller poller;
+    private final JenkinsJob job;
+    private final TriglavPoller poller;
 
-    public PollingTriglavTrigger(io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerJobWrapper job, io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerPoller poller)
+    public PollingTriglavTrigger(JenkinsJob job, TriglavPoller poller)
     {
         this.job = job;
         this.poller = poller;
@@ -22,7 +22,7 @@ public class PollingTriglavTrigger
 
     private void configure()
     {
-        if (job.isJobDisabled()) {
+        if (job.isDisabled()) {
             logger.info(String.format("[%s] Unregister Job :%s", getClass().getName(), job.url()));
             poller.unregisterJob();
             return;
@@ -42,7 +42,7 @@ public class PollingTriglavTrigger
 
     public boolean canKick()
     {
-        if (job.isJobBuildBlocked() || job.isJobDisabled()) {
+        if (job.isBuildBlocked() || job.isDisabled()) {
             return false;
         }
 

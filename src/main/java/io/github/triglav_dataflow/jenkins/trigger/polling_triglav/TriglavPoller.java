@@ -26,13 +26,13 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
-public class PollingTriglavTriggerPoller
+public class TriglavPoller
 {
     private static Logger logger = PollingTriglavTriggerPlugin.getLogger();
-    private final PollingTriglavTriggerPluginParameterWrapper params;
+    private final PluginParameter params;
     private final ApiClient client;
 
-    PollingTriglavTriggerPoller(PollingTriglavTriggerPluginParameterWrapper params)
+    TriglavPoller(PluginParameter params)
     {
         this.params = params;
         this.client = newApiClient();

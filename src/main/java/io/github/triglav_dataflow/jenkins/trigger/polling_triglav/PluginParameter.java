@@ -15,11 +15,11 @@ import java.util.List;
  This class provides getter, setter, and utilities for plugin parameters about PollingTriglavTriggerPlugin.
  */
 
-public class PollingTriglavTriggerPluginParameterWrapper
+public class PluginParameter
 {
     private final PollingTriglavTriggerPlugin plugin;
 
-    PollingTriglavTriggerPluginParameterWrapper(PollingTriglavTriggerPlugin plugin)
+    PluginParameter(PollingTriglavTriggerPlugin plugin)
     {
         this.plugin = plugin;
     }
