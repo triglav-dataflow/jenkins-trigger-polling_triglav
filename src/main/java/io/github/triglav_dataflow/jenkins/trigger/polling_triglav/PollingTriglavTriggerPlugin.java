@@ -2,6 +2,7 @@ package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
 import antlr.ANTLRException;
 import com.google.common.collect.Lists;
+import com.google.common.collect.Ordering;
 import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.mapper.Mapper;
@@ -307,7 +308,7 @@ public class PollingTriglavTriggerPlugin
         public ListBoxModel doFillTimeZoneItems(@QueryParameter String timeZone)
         {
             ListBoxModel options = new ListBoxModel();
-            for (String zoneID : TimeZone.getAvailableIDs()) {
+            for (String zoneID : Ordering.natural().sortedCopy(Lists.newArrayList(TimeZone.getAvailableIDs()))) {
                 ListBoxModel.Option option = new ListBoxModel.Option(
                         zoneID, zoneID, timeZone.contentEquals(zoneID));
                 options.add(option);
