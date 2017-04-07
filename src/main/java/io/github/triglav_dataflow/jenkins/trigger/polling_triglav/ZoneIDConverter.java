@@ -1,19 +1,19 @@
-package io.github.triglav_dataflow.jenkins.trigger.polling_triglav.unit;
+package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.TimeZone;
 
-public class TimeZoneConverter
+public class ZoneIDConverter
 {
-    private TimeZoneConverter()
+    private ZoneIDConverter()
     {
     }
 
     private static Date dummyDate = new Date();
     private static String ThreeLetterISO8601TimeZoneFormat = "XXX";
 
-    public static String convertToThreeLetterISO8601TimeZone(String zoneID)
+    public static String to3LettersISO860(String zoneID)
     {
         SimpleDateFormat sdf = new SimpleDateFormat(ThreeLetterISO8601TimeZoneFormat);
         sdf.setTimeZone(TimeZone.getTimeZone(zoneID));

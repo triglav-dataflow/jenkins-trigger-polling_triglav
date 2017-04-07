@@ -16,22 +16,22 @@
     <f:password value="${it.password}"/>
   </f:entry>
   <f:entry title="Authenticator" field="authenticator">
-    <f:select />
+    <f:select/>
   </f:entry>
-  <f:entry title="Api Key (ReadOnly)" field="apiKey">
-    <f:readOnlyTextbox value="${it.apiKey}"/>
+  <f:entry title="Api Key (Optional, Automatically Generated.)" field="apiKey">
+    <f:password value="${it.apiKey}"/>
   </f:entry>
   <f:entry title="Job Message Offset (ReadOnly)" field="jobMessageOffset">
-    <f:number value="${it.jobMessageOffset}" readonly="readonly" />
+    <f:number value="${it.jobMessageOffset}" readonly="readonly"/>
   </f:entry>
   <f:entry title="Time Zone" field="timeZone">
-    <f:select />
+    <f:select/>
   </f:entry>
   <f:entry title="Time Unit" field="timeUnit">
-    <f:select />
+    <f:select/>
   </f:entry>
   <f:entry title="Logical Operator" field="logicalOp">
-    <f:select />
+    <f:select/>
   </f:entry>
   <f:entry title="Resources" field="resourceConfigs">
     <f:repeatable
@@ -41,7 +41,7 @@
         minimum="1"
     >
       <table width="100%">
-        <st:include page="config.jelly" class="io.github.triglav_dataflow.jenkins.trigger.polling_triglav.PollingTriglavTriggerResourceConfig"/>
+        <st:include page="config.jelly" class="io.github.triglav_dataflow.jenkins.trigger.polling_triglav.TriglavResourceConfig"/>
         <f:entry title="">
           <div align="right">
             <f:repeatableDeleteButton/>

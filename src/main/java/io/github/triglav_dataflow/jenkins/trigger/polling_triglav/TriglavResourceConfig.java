@@ -4,33 +4,25 @@ import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.mapper.Mapper;
 import hudson.Extension;
-import hudson.model.AbstractProject;
 import hudson.model.Describable;
 import hudson.model.Descriptor;
-import hudson.util.ListBoxModel;
 import hudson.util.RobustReflectionConverter;
-import io.github.triglav_dataflow.jenkins.trigger.polling_triglav.unit.TimeUnit;
-import io.github.triglav_dataflow.jenkins.trigger.polling_triglav.unit.TimeZoneConverter;
 import jenkins.model.Jenkins;
 import net.sf.json.JSONObject;
-import org.kohsuke.stapler.AncestorInPath;
 import org.kohsuke.stapler.DataBoundConstructor;
-import org.kohsuke.stapler.QueryParameter;
 import org.kohsuke.stapler.StaplerRequest;
 
-import java.util.TimeZone;
-
-public class PollingTriglavTriggerResourceConfig
-        implements Describable<PollingTriglavTriggerResourceConfig>
+public class TriglavResourceConfig
+        implements Describable<TriglavResourceConfig>
 {
     public static DescriptorImpl getClassDescriptor()
     {
         return (DescriptorImpl) Jenkins.getInstance().getDescriptorOrDie(
-                PollingTriglavTriggerResourceConfig.class);
+                TriglavResourceConfig.class);
     }
 
     @Override
-    public Descriptor<PollingTriglavTriggerResourceConfig> getDescriptor()
+    public Descriptor<TriglavResourceConfig> getDescriptor()
     {
         return getClassDescriptor();
     }
@@ -39,7 +31,7 @@ public class PollingTriglavTriggerResourceConfig
     private final String resourceUri;
 
     @DataBoundConstructor
-    public PollingTriglavTriggerResourceConfig(String resourceId, String resourceUri)
+    public TriglavResourceConfig(String resourceId, String resourceUri)
     {
         this.resourceId = resourceId;
         this.resourceUri = resourceUri;
@@ -51,7 +43,7 @@ public class PollingTriglavTriggerResourceConfig
      * configuration file.
      */
     @SuppressWarnings("unused") // called reflectively by XStream
-    public PollingTriglavTriggerResourceConfig()
+    public TriglavResourceConfig()
     {
         this.resourceId = "";
         this.resourceUri = "";
@@ -99,7 +91,7 @@ public class PollingTriglavTriggerResourceConfig
 
     @Extension
     public static final class DescriptorImpl
-            extends Descriptor<PollingTriglavTriggerResourceConfig>
+            extends Descriptor<TriglavResourceConfig>
     {
         public DescriptorImpl()
         {

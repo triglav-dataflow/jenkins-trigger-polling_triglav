@@ -26,5 +26,27 @@
     <f:entry title="Triglav Url" field="triglavApiUrl">
       <f:textbox value="${it.triglavApiUrl}"/>
     </f:entry>
+    <f:entry title="Triglav Admin Username" field="adminUsername">
+      <f:textbox value="${it.adminUsername}"/>
+    </f:entry>
+    <f:entry title="Triglav Admin Password" field="adminPassword">
+      <f:password value="${it.adminPassword}"/>
+    </f:entry>
+    <f:entry title="Triglav Admin Api Key (Optional, Automatically Generated.)" field="adminApiKey">
+      <f:password value="${it.adminApiKey}"/>
+    </f:entry>
+    <f:entry title="Max Job Enqueue Count" field="maxEnqueueCount">
+      <f:number value="${it.maxEnqueueCount}"/>
+    </f:entry>
   </f:section>
 </j:jelly>
+
+<tr>
+<td class="setting-leftspace"> </td>
+<td class="setting-name">Triglav Admin Api Key (ReadOnly)</td>
+<td class="setting-main">
+  <input name="_.adminApiKey" value="" class="setting-input  " type="text" readonly="readonly" />
+</td>
+<td class="setting-no-help"></td>
+</tr>
+<tr class="validation-error-area"><td colspan="2"></td><td></td><td></td></tr><tr>
