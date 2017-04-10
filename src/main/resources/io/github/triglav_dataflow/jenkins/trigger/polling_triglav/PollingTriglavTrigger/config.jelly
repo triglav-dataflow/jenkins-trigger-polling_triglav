@@ -21,6 +21,9 @@
   <f:entry title="Api Key (Optional, Automatically Generated.)" field="apiKey">
     <f:password value="${it.apiKey}"/>
   </f:entry>
+  <f:validateButton
+      title="${%Test Authentication}" progress="${%Testing...}"
+      method="testAuthentication" with="username,password,authenticator,apiKey" />
   <f:entry title="Job Message Offset (ReadOnly)" field="jobMessageOffset">
     <f:number value="${it.jobMessageOffset}" readonly="readonly"/>
   </f:entry>

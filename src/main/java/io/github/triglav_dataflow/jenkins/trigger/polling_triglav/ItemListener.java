@@ -183,7 +183,7 @@ public class ItemListener
             // case 2A or case 4
             logger.fine(String.format("Registered Job: %s as a Triglav Job ID: %s.",
                     item.getFullName(), t.parameters().jobId()));
-            tJobMap.put(item.getFullName(), t.parameters().jobId()); // TODO: Check job id was updated already?
+            tJobMap.put(item.getFullName(), t.parameters().jobId());
         }
         else {
             // case 2B or case 1

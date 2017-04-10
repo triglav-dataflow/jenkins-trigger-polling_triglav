@@ -540,20 +540,31 @@ public class PollingTriglavTrigger
         @Override
         public String getDisplayName()
         {
-            // TODO: https://wiki.jenkins-ci.org/display/JENKINS/Internationalization
             return "Polling Triglav Trigger";
         }
 
-        public FormValidation doCheckPassword(@QueryParameter String username, @QueryParameter String password, @QueryParameter String authenticator)
+        public FormValidation doTestAuthentication(
+                @QueryParameter String username,
+                @QueryParameter String password,
+                @QueryParameter String authenticator,
+                @QueryParameter String apiKey)
         {
             try {
                 TriglavClient client = new TriglavClient(PollingTriglavTrigger.getTriglavApiUrl(), getDefaultConfigurable());
-                client.authenticate(username, password, Credential.AuthenticatorEnum.valueOf(authenticator), "");
-                return FormValidation.ok();
+                client.authenticate(username, password, Credential.AuthenticatorEnum.valueOf(authenticator), apiKey);
+                return FormValidation.ok("Authentication Succeeded");
             }
             catch (ApiException e) {
-                return FormValidation.error("Unable to authorize ");
+                return FormValidation.error("Authorization Failed");
             }
+        }
+
+        public FormValidation doTestAdminAuthentication(
+                @QueryParameter String adminUsername,
+                @QueryParameter String adminPassword,
+                @QueryParameter String adminApiKey)
+        {
+            return doTestAuthentication(adminUsername, adminPassword, "LOCAL", adminApiKey);
         }
 
         @SuppressWarnings("unused")
