@@ -1,11 +1,12 @@
 package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
-import com.google.common.base.Throwables;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.ListeningExecutorService;
 import com.google.common.util.concurrent.MoreExecutors;
 import hudson.model.BuildableItem;
+import io.github.triglav_dataflow.client.ApiException;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
@@ -42,7 +43,15 @@ public class Runner
                     return;
                 }
 
-                TriglavClient triglavClient = TriglavClient.fromTriggerParameter(plugin.parameters());
+                TriglavClient triglavClient = null;
+                try {
+                    triglavClient = TriglavClient.fromTriggerParameter(plugin.parameters());
+                }
+                catch (ApiException e) {
+                    logger.throwing(Runner.class.getName(), "runIfPossible", e);
+                    throw new RuntimeException(
+                            String.format("Error: %s, Job: %s", e.getMessage(), jenkinsJob.name()), e);
+                }
                 TriglavJob triglavJob = new TriglavJob(plugin.parameters(), triglavClient);
 
                 if (!triglavJob.hasId()) {
@@ -58,7 +67,14 @@ public class Runner
                     logger.fine(String.format("Enqueue Job %s. Enqueue count %d.", jenkinsJob.name(), i));
                     jenkinsJob.setBuildParameters(triglavJob.currentMassage());
                     jenkinsJob.build();
-                    jenkinsJob.save();
+                    try {
+                        jenkinsJob.save();
+                    }
+                    catch (IOException e) {
+                        logger.throwing(Runner.class.getName(), "runIfPossible", e);
+                        throw new RuntimeException(
+                                String.format("Error: %s, Job: %s", e.getMessage(), jenkinsJob.name()), e);
+                    }
                     if (i >= PollingTriglavTrigger.getMaxEnqueueCount()) {
                         logger.fine(String.format("Max enqueue count %d is exceeded. Wait until next enqueue chance.", i));
                         break;
@@ -87,7 +103,7 @@ public class Runner
                             break;
                         }
                         catch (InterruptedException | ExecutionException e) {
-                            throw Throwables.propagate(e);
+                            throw new RuntimeException(String.format("Error: %s", e.getMessage()), e);
                         }
                     }
                     Thread.yield();

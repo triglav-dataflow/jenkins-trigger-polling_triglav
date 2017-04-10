@@ -3,7 +3,6 @@ package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 import antlr.ANTLRException;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
 import com.google.common.collect.Lists;
 import com.google.common.collect.Ordering;
 import com.thoughtworks.xstream.converters.Converter;
@@ -397,7 +396,7 @@ public class PollingTriglavTrigger
                 rConfig.get().setResourceId(resourceId);
             }
             else {
-                throw Throwables.propagate(new IllegalStateException(String.format("ResourceUri:%s is not found.", resourceUri)));
+                throw new IllegalStateException(String.format("ResourceUri:%s is not found.", resourceUri));
             }
         }
 

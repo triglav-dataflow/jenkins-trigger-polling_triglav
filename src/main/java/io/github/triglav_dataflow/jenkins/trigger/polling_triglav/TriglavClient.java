@@ -1,7 +1,6 @@
 package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
 import com.google.common.base.Optional;
-import com.google.common.base.Throwables;
 import com.squareup.okhttp.OkHttpClient;
 import io.github.triglav_dataflow.client.ApiClient;
 import io.github.triglav_dataflow.client.ApiException;
@@ -46,35 +45,30 @@ public class TriglavClient // TODO: HTTP Request requires Retriable?
     }
 
     public static TriglavClient fromTriggerParameter(PollingTriglavTrigger.Parameters parameters)
+            throws ApiException
     {
         TriglavClient client = new TriglavClient(parameters.triglavApiUrl(), getDefaultConfigurable());
-        try {
-            client.authenticate(
-                    parameters.username(),
-                    parameters.password(),
-                    parameters.authenticator(),
-                    parameters.apiKey());
-        }
-        catch (ApiException e) {
-            throw Throwables.propagate(e);
-        }
+
+        client.authenticate(
+                parameters.username(),
+                parameters.password(),
+                parameters.authenticator(),
+                parameters.apiKey());
+
         parameters.setApiKey(client.getApiKey());
         return client;
     }
 
     public static TriglavClient fromTriggerAdminParameter()
+            throws ApiException
     {
         TriglavClient client = new TriglavClient(PollingTriglavTrigger.getTriglavApiUrl(), getDefaultConfigurable());
-        try {
-            client.authenticate(
-                    PollingTriglavTrigger.getAdminUsername(),
-                    PollingTriglavTrigger.getAdminPassword(),
-                    Credential.AuthenticatorEnum.LOCAL, // TODO: from UI?
-                    PollingTriglavTrigger.getAdminApiKey());
-        }
-        catch (ApiException e) {
-            throw Throwables.propagate(e);
-        }
+        client.authenticate(
+                PollingTriglavTrigger.getAdminUsername(),
+                PollingTriglavTrigger.getAdminPassword(),
+                Credential.AuthenticatorEnum.LOCAL, // TODO: from UI?
+                PollingTriglavTrigger.getAdminApiKey());
+
         PollingTriglavTrigger.setAdminApiKey(client.getApiKey());
         return client;
     }

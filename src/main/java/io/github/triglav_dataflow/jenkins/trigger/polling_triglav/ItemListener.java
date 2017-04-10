@@ -1,6 +1,5 @@
 package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
-import com.google.common.base.Throwables;
 import hudson.Extension;
 import hudson.model.AbstractProject;
 import hudson.model.BuildableItem;
@@ -56,7 +55,11 @@ public class ItemListener
         }
         catch (IOException e) {
             logger.throwing(getClass().getName(), "onCopied", e);
-            throw Throwables.propagate(e);
+            throw new RuntimeException(
+                    String.format(
+                            "Job: %s, Job ID: %s, Error: %s",
+                            item.getFullName(), t.parameters().jobId(), e.getMessage()
+                    ), e);
         }
     }
 
@@ -73,10 +76,22 @@ public class ItemListener
         super.onDeleted(item);
 
         if (tJobMap.containsKey(item.getFullName())) {
-            logger.fine(String.format("Job: %s Job ID: %s is deleted from Triglav.",
-                    item.getFullName(), tJobMap.get(item.getFullName())));
+            String jobId = tJobMap.get(item.getFullName());
 
-            unregisterJobFromTriglav(tJobMap.get(item.getFullName()));
+            logger.fine(String.format("Job: %s Job ID: %s is deleted from Triglav.",
+                    item.getFullName(), jobId));
+
+            try {
+                unregisterJobFromTriglav(jobId);
+            }
+            catch (ApiException e) {
+                logger.throwing(getClass().getName(), "onDeleted", e);
+                throw new RuntimeException(
+                        String.format(
+                                "Job: %s, Job ID: %s, Error: %s",
+                                item.getFullName(), jobId, e.getMessage()
+                        ), e);
+            }
             tJobMap.remove(item.getFullName());
         }
     }
@@ -144,11 +159,24 @@ public class ItemListener
 
         if (!isProject(item) || !hasPollingTriglavTrigger(item)) {
             if (tJobMap.containsKey(item.getFullName())) {
+                String jobId = tJobMap.get(item.getFullName());
+
                 // case 3A or case 3B
                 logger.fine(String.format("Trigger is removed from %s. Triglav job id was %s.",
-                        item.getFullName(), tJobMap.get(item.getFullName())));
+                        item.getFullName(), jobId));
 
-                unregisterJobFromTriglav(tJobMap.get(item.getFullName()));
+                try {
+                    unregisterJobFromTriglav(jobId);
+                }
+                catch (ApiException e) {
+                    logger.throwing(getClass().getName(), "onUpdated", e);
+                    throw new RuntimeException(
+                            String.format(
+                                    "Job: %s, Job ID: %s, Error: %s",
+                                    item.getFullName(), jobId, e.getMessage()
+                            ), e);
+                }
+                tJobMap.remove(item.getFullName());
             }
             return;
         }
@@ -159,7 +187,17 @@ public class ItemListener
             // case 5
             onDeleted(item);
             t.parameters().initializeMinimumRequired();
-            jenkinsJob.save();
+            try {
+                jenkinsJob.save();
+            }
+            catch (IOException e) {
+                logger.throwing(getClass().getName(), "onUpdated", e);
+                throw new RuntimeException(
+                        String.format(
+                                "Job: %s, Job ID: %s, Error: %s",
+                                item.getFullName(), t.parameters().jobId(), e.getMessage()
+                        ), e);
+            }
             return;
         }
 
@@ -174,10 +212,19 @@ public class ItemListener
             logger.fine(String.format("Update Job: %s.", item.getFullName()));
         }
 
-        TriglavJob triglavJob = createTriglavJob(t.parameters());
-
-        triglavJob.registerOrUpdate(jenkinsJob);
-        jenkinsJob.save();
+        try {
+            TriglavJob triglavJob = createTriglavJob(t.parameters());
+            triglavJob.registerOrUpdate(jenkinsJob);
+            jenkinsJob.save();
+        }
+        catch (ApiException | IOException e) {
+            logger.throwing(getClass().getName(), "onUpdated", e);
+            throw new RuntimeException(
+                    String.format(
+                            "Job: %s, Job ID: %s, Error: %s",
+                            item.getFullName(), t.parameters().jobId(), e.getMessage()
+                    ), e);
+        }
 
         if (isRegistering) {
             // case 2A or case 4
@@ -298,24 +345,29 @@ public class ItemListener
             logger.warning(String.format(
                     "Unregister Job: %s, Triglav Job ID: %s because the job should had been already unregistered.",
                     entry.getKey(), entry.getValue()));
-            unregisterJobFromTriglav(entry.getValue());
+            try {
+                unregisterJobFromTriglav(entry.getValue());
+            }
+            catch (ApiException e) {
+                logger.throwing(getClass().getName(), "onUpdated", e);
+                throw new RuntimeException(
+                        String.format(
+                                "Job: %s, Job ID: %s, Error: %s",
+                                entry.getKey(), entry.getValue(), e.getMessage()
+                        ), e);
+            }
         }
     }
 
     private void unregisterJobFromTriglav(String jobId)
+            throws ApiException
     {
-
         TriglavClient c = TriglavClient.fromTriggerAdminParameter();
-        try {
-            c.unregisterJob(jobId);
-        }
-        catch (ApiException e) {
-            logger.throwing(getClass().getName(), "unregisterJobFromTriglav", e);
-            throw Throwables.propagate(e);
-        }
+        c.unregisterJob(jobId);
     }
 
     private TriglavJob createTriglavJob(PollingTriglavTrigger.Parameters parameters)
+            throws ApiException
     {
         return new TriglavJob(parameters, TriglavClient.fromTriggerParameter(parameters));
     }

@@ -88,13 +88,14 @@ public class JenkinsJob
     }
 
     public void save()
+            throws IOException
     {
         try {
             item.save();
         }
         catch (IOException e) {
             logger.throwing(getClass().getName(), "save", e);
-            throw Throwables.propagate(e);
+            throw e;
         }
     }
 

@@ -3,7 +3,6 @@ package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 import com.google.common.base.Function;
 import com.google.common.base.Optional;
 import com.google.common.base.Predicate;
-import com.google.common.base.Throwables;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
@@ -74,6 +73,7 @@ public class TriglavJob
     }
 
     public void registerOrUpdate(JenkinsJob jenkinsJob)
+            throws ApiException
     {
         boolean requireSetLastJobMessageOffset = false;
         Long jobId;
@@ -85,25 +85,12 @@ public class TriglavJob
             jobId = Long.valueOf(id());
         }
 
-        JobResponse jr;
-        try {
-            logger.fine(String.format("Register Or Update Job: ID: %s, URL: %s", jobId, jenkinsJob.url()));
-            jr = client.registerOrUpdateJob(jobId, jenkinsJob.url(), resourceRequests(), parameters.logicalOp());
-        }
-        catch (ApiException e) {
-            logger.throwing(getClass().getName(), "registerOrUpdate", e);
-            throw Throwables.propagate(e);
-        }
+        logger.fine(String.format("Register Or Update Job: ID: %s, URL: %s", jobId, jenkinsJob.url()));
+        JobResponse jr = client.registerOrUpdateJob(jobId, jenkinsJob.url(), resourceRequests(), parameters.logicalOp());
 
         parameters.setJobId(jr.getId().toString());
         if (requireSetLastJobMessageOffset) {
-            try {
-                setMessageOffset(client.getLastJobMessageId());
-            }
-            catch (ApiException e) {
-                logger.throwing(getClass().getName(), "registerOrUpdate", e);
-                throw Throwables.propagate(e);
-            }
+            setMessageOffset(client.getLastJobMessageId());
         }
         for (ResourceResponse rr : jr.getInputResources()) {
             parameters.setResourceId(rr.getUri(), rr.getId());
@@ -111,6 +98,7 @@ public class TriglavJob
     }
 
     public void destroy()
+            throws ApiException
     {
         String jobId = id();
         if (isBlank(jobId)) {
@@ -118,14 +106,8 @@ public class TriglavJob
             return;
         }
 
-        try {
-            logger.fine(String.format("Unregister from Triglav: Job ID: %s", jobId));
-            client.unregisterJob(jobId);
-        }
-        catch (ApiException e) {
-            logger.throwing(getClass().getName(), "destroy", e);
-            throw Throwables.propagate(e);
-        }
+        logger.fine(String.format("Unregister from Triglav: Job ID: %s", jobId));
+        client.unregisterJob(jobId);
     }
 
     private Optional<ImmutableMap<String, String>> consumeIfPossible()
