@@ -92,6 +92,7 @@ public class PollingTriglavTrigger
     private final String timeZone;
     private final String timeUnit;
     private final String logicalOp;
+    private final long spanInDays;
     private final List<TriglavResourceConfig> resourceConfigs;
     private final Parameters parameters;
 
@@ -111,6 +112,7 @@ public class PollingTriglavTrigger
             String timeZone,
             String timeUnit,
             String logicalOp,
+            long spanInDays,
             List<TriglavResourceConfig> resourceConfigs)
             throws ANTLRException
     {
@@ -124,6 +126,7 @@ public class PollingTriglavTrigger
         this.timeZone = timeZone;
         this.timeUnit = timeUnit;
         this.logicalOp = logicalOp;
+        this.spanInDays = spanInDays;
         this.resourceConfigs = resourceConfigs;
         this.parameters = new Parameters(this);
     }
@@ -147,6 +150,7 @@ public class PollingTriglavTrigger
         this.timeZone = "Asia/Tokyo";
         this.timeUnit = "daily";
         this.logicalOp = "or";
+        this.spanInDays = 32L;
         this.resourceConfigs = Lists.newArrayList();
         this.parameters = new Parameters(this);
     }
@@ -221,6 +225,12 @@ public class PollingTriglavTrigger
     public String getLogicalOp()
     {
         return logicalOp;
+    }
+
+    @SuppressWarnings("unused")
+    public long getSpanInDays()
+    {
+        return spanInDays;
     }
 
     @SuppressWarnings("unused") // called reflectively by XStream
@@ -338,6 +348,11 @@ public class PollingTriglavTrigger
         public String logicalOp()
         {
             return plugin.getLogicalOp();
+        }
+
+        public long spanInDays()
+        {
+            return plugin.getSpanInDays();
         }
 
         public void initializeMinimumRequired()

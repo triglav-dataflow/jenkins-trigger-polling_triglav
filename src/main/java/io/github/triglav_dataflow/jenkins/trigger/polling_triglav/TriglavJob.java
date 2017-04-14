@@ -178,6 +178,7 @@ public class TriglavJob
                                 input.getResourceUri(),
                                 parameters.timeZone(),
                                 parameters.timeUnit(),
+                                parameters.spanInDays(),
                                 parameters.isConsumable(),
                                 parameters.isNotifiable());
                     }

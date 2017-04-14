@@ -18,7 +18,7 @@
   <f:entry title="Authenticator" field="authenticator">
     <f:select/>
   </f:entry>
-  <f:entry title="Api Key (Optional, Automatically Generated.)" field="apiKey">
+  <f:entry title="Api Key (Optional, Automatically Generated)" field="apiKey">
     <f:password value="${it.apiKey}"/>
   </f:entry>
   <f:validateButton
@@ -35,6 +35,9 @@
   </f:entry>
   <f:entry title="Logical Operator" field="logicalOp">
     <f:select/>
+  </f:entry>
+  <f:entry title="Span In Days" field="spanInDays">
+    <f:number value="${it.spanInDays}"/>
   </f:entry>
   <f:entry title="Resources" field="resourceConfigs">
     <f:repeatable

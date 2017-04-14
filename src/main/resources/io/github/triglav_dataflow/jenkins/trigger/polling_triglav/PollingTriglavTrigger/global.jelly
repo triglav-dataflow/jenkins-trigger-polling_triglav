@@ -32,7 +32,7 @@
     <f:entry title="Triglav Admin Password" field="adminPassword">
       <f:password value="${it.adminPassword}"/>
     </f:entry>
-    <f:entry title="Triglav Admin Api Key (Optional, Automatically Generated.)" field="adminApiKey">
+    <f:entry title="Triglav Admin Api Key (Optional, Automatically Generated)" field="adminApiKey">
       <f:password value="${it.adminApiKey}"/>
     </f:entry>
     <f:validateButton

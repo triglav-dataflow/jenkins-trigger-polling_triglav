@@ -153,6 +153,7 @@ public class TriglavClient // TODO: HTTP Request requires Retriable?
             String resourceUri,
             String timeZone,
             String timeUnit,
+            long spanInDays,
             boolean isConsumable,
             boolean isNotifiable)
     {
@@ -163,6 +164,7 @@ public class TriglavClient // TODO: HTTP Request requires Retriable?
         rr.setUri(resourceUri);
         rr.setTimezone(timeZone);
         rr.setUnit(timeUnit);
+        rr.setSpanInDays(spanInDays);
         rr.setConsumable(isConsumable);
         rr.setNotifiable(isNotifiable);
         return rr;
