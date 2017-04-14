@@ -7,7 +7,7 @@ Jenkins Plugin For [Triglav](https://github.com/sonots/triglav).
 
 # Usage
 
-![image](https://cloud.githubusercontent.com/assets/4525500/24992853/85b1b0e2-205e-11e7-9de6-4eac1411a72a.png)
+![image](https://cloud.githubusercontent.com/assets/4525500/25040599/68feadbe-2145-11e7-9722-e4460170eb10.png)
 
 - **Job Id (ReadOnly)**: Job id on Triglav. Users cannot configure this value.
 - **Username**: Username to authenticate to Triglav.
