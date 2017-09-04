@@ -59,6 +59,7 @@ Require the below.
 ```
 git clone git@github.com:civitaspo/jenkins-trigger-polling_triglav.git
 cd jenkins-trigger-polling_triglav
+git submodule update --init # for triglav-client-java
 ./run-debug-server.sh
 ```
 
