@@ -53,7 +53,6 @@ Require the below.
 
 - [triglav](https://github.com/sonots/triglav/blob/5cc95322b843993875211226a343940aa6d49e64/README.md)
 - java
-- gradle
 
 ## Build Jenkins for Debug
 
