@@ -544,8 +544,9 @@ public class PollingTriglavTrigger
         @Override
         public boolean isApplicable(Item item)
         {
-            // TODO: Change `extends Trigger<BuildableItem>` to `extends Trigger<AbstractProject>` if can
-            return item instanceof AbstractProject;
+            // TODO: Change `extends Trigger<BuildableItem>` to `extends Trigger<AbstractProject>` if can,
+            //       because BuildableItem doesn't have #getTrigger interface.
+            return item instanceof BuildableItem;
         }
 
         /**
