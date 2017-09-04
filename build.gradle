@@ -34,7 +34,6 @@ jenkinsPlugin {
 
 dependencies {
     compile project('triglav-client-java')
-    compile group: 'org.slf4j', name: 'slf4j-api', version:'1.7.7'
     testCompile project('triglav-client-java')
 }
 
