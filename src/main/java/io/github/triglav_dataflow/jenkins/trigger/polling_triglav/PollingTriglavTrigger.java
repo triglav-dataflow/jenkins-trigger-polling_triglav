@@ -337,7 +337,7 @@ public class PollingTriglavTrigger
 
         public String timeZone()
         {
-            return ZoneIDConverter.to3LettersISO860(plugin.getTimeZone());
+            return ZoneIDConverter.toThreeLetterISO8601(plugin.getTimeZone());
         }
 
         public String timeUnit()

@@ -13,7 +13,7 @@ public class ZoneIDConverter
     private static Date dummyDate = new Date();
     private static String ThreeLetterISO8601TimeZoneFormat = "XXX";
 
-    public static String to3LettersISO860(String zoneID)
+    public static String toThreeLetterISO8601(String zoneID)
     {
         SimpleDateFormat sdf = new SimpleDateFormat(ThreeLetterISO8601TimeZoneFormat);
         sdf.setTimeZone(TimeZone.getTimeZone(zoneID));
