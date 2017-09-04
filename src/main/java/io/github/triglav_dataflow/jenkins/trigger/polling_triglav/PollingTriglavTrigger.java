@@ -242,7 +242,7 @@ public class PollingTriglavTrigger
     @Override
     public void run()
     {
-        Runner.runIfPossible(this, job);
+        ItemRunner.runIfPossible(this, job);
     }
 
     public Parameters parameters()

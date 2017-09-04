@@ -11,9 +11,9 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.Executors;
 import java.util.logging.Logger;
 
-public class Runner
+public class ItemRunner
 {
-    private Runner()
+    private ItemRunner()
     {
     }
 
@@ -48,7 +48,7 @@ public class Runner
                     triglavClient = TriglavClient.fromTriggerParameter(plugin.parameters());
                 }
                 catch (ApiException e) {
-                    logger.throwing(Runner.class.getName(), "runIfPossible", e);
+                    logger.throwing(ItemRunner.class.getName(), "runIfPossible", e);
                     throw new RuntimeException(
                             String.format("Error: %s, Job: %s", e.getMessage(), jenkinsJob.name()), e);
                 }
@@ -71,7 +71,7 @@ public class Runner
                         jenkinsJob.save();
                     }
                     catch (IOException e) {
-                        logger.throwing(Runner.class.getName(), "runIfPossible", e);
+                        logger.throwing(ItemRunner.class.getName(), "runIfPossible", e);
                         throw new RuntimeException(
                                 String.format("Error: %s, Job: %s", e.getMessage(), jenkinsJob.name()), e);
                     }
