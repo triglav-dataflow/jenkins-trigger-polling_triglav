@@ -37,3 +37,15 @@ dependencies {
     testCompile project('triglav-client-java')
 }
 
+checkstyle {
+    configFile = file("${project.rootDir}/config/checkstyle/checkstyle.xml")
+    toolVersion = '6.14.1'
+}
+checkstyleMain {
+    configFile = file("${project.rootDir}/config/checkstyle/default.xml")
+    ignoreFailures = true
+}
+checkstyleTest {
+    configFile = file("${project.rootDir}/config/checkstyle/default.xml")
+    ignoreFailures = true
+}
