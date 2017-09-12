@@ -18,3 +18,8 @@ work
 
 .gradle
 build
+bin
+
+.classpath
+.project
+org.eclipse*

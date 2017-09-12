@@ -16,7 +16,6 @@ import io.github.triglav_dataflow.client.api.JobMessagesApi;
 import io.github.triglav_dataflow.client.api.JobsApi;
 
 import java.util.List;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.Logger;
 
 public class TriglavClient // TODO: HTTP Request requires Retriable?
@@ -34,9 +33,9 @@ public class TriglavClient // TODO: HTTP Request requires Retriable?
             @Override
             public void configure(OkHttpClient httpClient)
             {
-                httpClient.setReadTimeout(5L, TimeUnit.SECONDS);
-                httpClient.setConnectTimeout(5L, TimeUnit.SECONDS);
-                httpClient.setWriteTimeout(5L, TimeUnit.SECONDS);
+                httpClient.setReadTimeout(5L, java.util.concurrent.TimeUnit.SECONDS);
+                httpClient.setConnectTimeout(5L, java.util.concurrent.TimeUnit.SECONDS);
+                httpClient.setWriteTimeout(5L, java.util.concurrent.TimeUnit.SECONDS);
                 httpClient.setRetryOnConnectionFailure(true);
                 httpClient.setFollowRedirects(true);
                 httpClient.setFollowSslRedirects(true);
@@ -152,7 +151,7 @@ public class TriglavClient // TODO: HTTP Request requires Retriable?
             Long resourceId,
             String resourceUri,
             String timeZone,
-            String timeUnit,
+            TimeUnit timeUnit,
             long spanInDays,
             boolean isConsumable,
             boolean isNotifiable)
@@ -163,7 +162,7 @@ public class TriglavClient // TODO: HTTP Request requires Retriable?
         }
         rr.setUri(resourceUri);
         rr.setTimezone(timeZone);
-        rr.setUnit(timeUnit);
+        rr.setUnit(timeUnit.getValue());
         rr.setSpanInDays(spanInDays);
         rr.setConsumable(isConsumable);
         rr.setNotifiable(isNotifiable);
@@ -215,5 +214,4 @@ public class TriglavClient // TODO: HTTP Request requires Retriable?
             return Optional.absent();
         }
     }
-
 }

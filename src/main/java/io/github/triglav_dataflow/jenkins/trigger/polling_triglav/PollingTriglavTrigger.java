@@ -9,7 +9,6 @@ import com.thoughtworks.xstream.converters.Converter;
 import com.thoughtworks.xstream.converters.reflection.PureJavaReflectionProvider;
 import com.thoughtworks.xstream.mapper.Mapper;
 import hudson.Extension;
-import hudson.model.AbstractProject;
 import hudson.model.BuildableItem;
 import hudson.model.Item;
 import hudson.triggers.Trigger;
@@ -27,9 +26,12 @@ import org.kohsuke.stapler.StaplerRequest;
 
 import javax.annotation.Nullable;
 
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.TimeZone;
 import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 import static io.github.triglav_dataflow.jenkins.trigger.polling_triglav.TriglavClient.getDefaultConfigurable;
 
@@ -91,6 +93,7 @@ public class PollingTriglavTrigger
     private long jobMessageOffset;
     private final String timeZone;
     private final String timeUnit;
+    private final String alternativeExecutionTime;
     private final String logicalOp;
     private final long spanInDays;
     private final List<TriglavResourceConfig> resourceConfigs;
@@ -111,6 +114,7 @@ public class PollingTriglavTrigger
             long jobMessageOffset,
             String timeZone,
             String timeUnit,
+            String alternativeExecutionTime,
             String logicalOp,
             long spanInDays,
             List<TriglavResourceConfig> resourceConfigs)
@@ -125,6 +129,7 @@ public class PollingTriglavTrigger
         this.jobMessageOffset = jobMessageOffset;
         this.timeZone = timeZone;
         this.timeUnit = timeUnit;
+        this.alternativeExecutionTime = alternativeExecutionTime;
         this.logicalOp = logicalOp;
         this.spanInDays = spanInDays;
         this.resourceConfigs = resourceConfigs;
@@ -149,6 +154,7 @@ public class PollingTriglavTrigger
         this.jobMessageOffset = 0L;
         this.timeZone = "Asia/Tokyo";
         this.timeUnit = "daily";
+        this.alternativeExecutionTime = "";
         this.logicalOp = "or";
         this.spanInDays = 32L;
         this.resourceConfigs = Lists.newArrayList();
@@ -162,9 +168,9 @@ public class PollingTriglavTrigger
     }
 
     @SuppressWarnings("unused") // called reflectively by XStream
-    public String setJobId(String jobId)
+    public synchronized void setJobId(String jobId)
     {
-        return this.jobId = jobId;
+        this.jobId = jobId;
     }
 
     @SuppressWarnings("unused") // called reflectively by XStream
@@ -219,6 +225,12 @@ public class PollingTriglavTrigger
     public String getTimeUnit()
     {
         return timeUnit;
+    }
+
+    @SuppressWarnings("unused") // called reflectively by XStream
+    public String getAlternativeExecutionTime()
+    {
+        return alternativeExecutionTime;
     }
 
     @SuppressWarnings("unused") // called reflectively by XStream
@@ -340,9 +352,47 @@ public class PollingTriglavTrigger
             return ZoneIDConverter.toThreeLetterISO8601(plugin.getTimeZone());
         }
 
-        public String timeUnit()
+        public TimeUnit timeUnit()
         {
-            return plugin.getTimeUnit();
+            return TimeUnit.valueOf(plugin.getTimeUnit().toUpperCase());
+        }
+
+        public Date alternativeExecutionTime()
+        {
+            String alternativeExecutionTimeString = plugin.getAlternativeExecutionTime();
+            Date nextAlternativeExecutionTime = null;
+
+            try {
+                String[] hourMinutes = alternativeExecutionTimeString.split(":");
+                Calendar alternativeTimeCalendar = Calendar.getInstance();
+                alternativeTimeCalendar.set(Calendar.SECOND, 0);
+
+                if (hourMinutes.length == 1) {
+                    Integer minutes = Integer.valueOf(hourMinutes[0]);
+                    alternativeTimeCalendar.set(Calendar.MINUTE, minutes);
+                }
+                else if (hourMinutes.length == 2) {
+                    Integer hours = Integer.valueOf(hourMinutes[0]);
+                    Integer minutes = Integer.valueOf(hourMinutes[1]);
+                    alternativeTimeCalendar.set(Calendar.HOUR_OF_DAY, hours);
+                    alternativeTimeCalendar.set(Calendar.MINUTE, minutes);
+                }
+                else {
+                    logger.fine(
+                        String.format("Error parsing alternativeExecutionTime: %s", alternativeExecutionTimeString)
+                    );
+                    return null;
+                }
+
+                nextAlternativeExecutionTime = alternativeTimeCalendar.getTime();
+            }
+            catch (Exception e) {
+                logger.fine(
+                    String.format("Error parsing alternativeExecutionTime: %s, alternativeExecutionTime: %s", e.getMessage(), alternativeExecutionTimeString)
+                );
+            }
+
+            return nextAlternativeExecutionTime;
         }
 
         public String logicalOp()
@@ -609,7 +659,7 @@ public class PollingTriglavTrigger
         public ListBoxModel doFillTimeUnitItems(@QueryParameter String timeUnit)
         {
             ListBoxModel options = new ListBoxModel();
-            String[] availableUnits = {"hourly", "daily", "singular"};
+            String[] availableUnits = {TimeUnit.HOURLY.getValue(), TimeUnit.DAILY.getValue(), TimeUnit.SINGULAR.getValue()};
             for (String unit : availableUnits) {
                 options.add(new ListBoxModel.Option(unit, unit, timeUnit.contentEquals(unit)));
             }
@@ -634,6 +684,18 @@ public class PollingTriglavTrigger
             options.add(new ListBoxModel.Option("or", "or", "or".contentEquals(logicalOp)));
             options.add(new ListBoxModel.Option("and", "and", "and".contentEquals(logicalOp)));
             return options;
+        }
+
+        @SuppressWarnings("unused")
+        public FormValidation doCheckAlternativeExecutionTime(@QueryParameter String alternativeExecutionTime)
+        {
+            String pattern = "^([0-5][0-9]|(0[0-9]|1[0-9]|2[0-3]):[0-5][0-9])$";
+
+            if (alternativeExecutionTime.isEmpty() || Pattern.matches(pattern, alternativeExecutionTime)) {
+                return FormValidation.ok();
+            }
+
+            return FormValidation.error("Format must be mm for hourly and HH:mm for daily");
         }
     }
 }

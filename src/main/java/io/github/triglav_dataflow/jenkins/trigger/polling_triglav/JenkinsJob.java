@@ -1,19 +1,17 @@
 package io.github.triglav_dataflow.jenkins.trigger.polling_triglav;
 
-import com.google.common.base.Throwables;
-import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Lists;
+import hudson.model.AbstractBuild;
 import hudson.model.AbstractProject;
 import hudson.model.BuildableItem;
 import hudson.model.Cause;
 import hudson.model.ParameterValue;
 import hudson.model.ParametersAction;
-import hudson.model.StringParameterValue;
 import jenkins.model.Jenkins;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
 import java.util.logging.Logger;
 
 public class JenkinsJob
@@ -42,31 +40,24 @@ public class JenkinsJob
         return buildParameters;
     }
 
-    public synchronized void setBuildParameters(Map<String, String> parameters)
+    public void setBuildParameters(List<ParameterValue> buildParameters)
     {
-        if (parameters == null) {
-            buildParameters = Lists.newArrayList();
-            return;
-        }
-
-        ImmutableList.Builder<ParameterValue> builder = ImmutableList.builder();
-        for (Map.Entry<String, String> entry : parameters.entrySet()) {
-            builder.add(new StringParameterValue(entry.getKey(), entry.getValue()));
-        }
-        buildParameters = builder.build();
+        this.buildParameters = buildParameters;
     }
 
-    public void build()
+    public void build(Cause cause) throws RuntimeException
     {
-        if (item instanceof AbstractProject) {
-            ((AbstractProject) item).scheduleBuild(
-                    0,
-                    buildWithParametersCause(),
-                    new ParametersAction(buildParameters()));
+        if (!(item instanceof AbstractProject)) {
+            RuntimeException e = new RuntimeException(
+                String.format("Error: Not %s, Job: %s", AbstractProject.class.getName(), name()));
+            logger.throwing(JenkinsJob.class.getName(), "build", e);
+            throw e;
         }
-        else {
-            item.scheduleBuild(0, defaultCause());
-        }
+
+        ((AbstractProject) item).scheduleBuild(
+            0,
+            cause,
+            new ParametersAction(buildParameters()));
     }
 
     /*
@@ -87,6 +78,18 @@ public class JenkinsJob
         return false;
     }
 
+    public Date getLastBuildDate()
+    {
+        if (item instanceof AbstractProject) {
+            AbstractBuild lastBuild = ((AbstractProject) item).getLastBuild();
+
+            if (null != lastBuild) {
+                return lastBuild.getTime();
+            }
+        }
+        return null;
+    }
+
     public void save()
             throws IOException
     {
@@ -99,34 +102,21 @@ public class JenkinsJob
         }
     }
 
+    public void buildAndSave(Cause cause)
+    {
+        build(cause);
+        try {
+            save();
+        }
+        catch (IOException e) {
+            logger.throwing(JenkinsJob.class.getName(), "buildAndSave", e);
+            throw new RuntimeException(
+                String.format("Error: %s, Job: %s", e.getMessage(), name()), e);
+        }
+    }
+
     private Jenkins jenkins()
     {
         return Jenkins.getInstance();
-    }
-
-    private Cause buildWithParametersCause()
-    {
-        return new Cause() {
-            @Override
-            public String getShortDescription()
-            {
-                StringBuilder sb = new StringBuilder(String.format("Built by %s with Parameters: ", PollingTriglavTrigger.class.getName()));
-                for (ParameterValue parameterValue : buildParameters()) {
-                    sb.append(parameterValue);
-                }
-                return sb.toString();
-            }
-        };
-    }
-
-    private Cause defaultCause()
-    {
-        return new Cause() {
-            @Override
-            public String getShortDescription()
-            {
-                return String.format("Built by %s.", PollingTriglavTrigger.class.getName());
-            }
-        };
     }
 }
