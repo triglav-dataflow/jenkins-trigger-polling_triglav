@@ -49,7 +49,7 @@ public class JenkinsJob
     {
         if (!(item instanceof AbstractProject)) {
             RuntimeException e = new RuntimeException(
-                String.format("Error: Not %s, Job: %s", item.class.getName(), name()));
+                String.format("Error: Not %s, Job: %s", item.getClass().getName(), name()));
             logger.throwing(JenkinsJob.class.getName(), "build", e);
             throw e;
         }
