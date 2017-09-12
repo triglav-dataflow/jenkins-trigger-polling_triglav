@@ -659,10 +659,12 @@ public class PollingTriglavTrigger
         public ListBoxModel doFillTimeUnitItems(@QueryParameter String timeUnit)
         {
             ListBoxModel options = new ListBoxModel();
-            String[] availableUnits = {TimeUnit.HOURLY.getValue(), TimeUnit.DAILY.getValue(), TimeUnit.SINGULAR.getValue()};
-            for (String unit : availableUnits) {
-                options.add(new ListBoxModel.Option(unit, unit, timeUnit.contentEquals(unit)));
+
+            for (TimeUnit unit : TimeUnit.values()) {
+                String unitString = unit.getValue();
+                options.add(new ListBoxModel.Option(unitString, unitString, timeUnit.contentEquals(unitString)));
             }
+
             return options;
         }
 
