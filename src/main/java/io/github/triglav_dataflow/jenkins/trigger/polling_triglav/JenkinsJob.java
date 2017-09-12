@@ -17,12 +17,19 @@ import java.util.logging.Logger;
 public class JenkinsJob
 {
     private static Logger logger = PollingTriglavTrigger.getLogger();
-    private final BuildableItem item;
+    private final AbstractProject item;
     private List<ParameterValue> buildParameters = Lists.newArrayList();
 
     public JenkinsJob(BuildableItem item)
     {
-        this.item = item;
+        if (!(item instanceof AbstractProject)) {
+            IllegalArgumentException e = new IllegalArgumentException(
+                String.format("Error: Expected instance of %s, but got %s. Job: %s", AbstractProject.class.getName(), item.getClass().getName(), item.getFullName()));
+            logger.throwing(JenkinsJob.class.getName(), "build", e);
+            throw e;
+        }
+
+        this.item = (AbstractProject) item;
     }
 
     public String name()
@@ -47,14 +54,7 @@ public class JenkinsJob
 
     public void build(Cause cause) throws RuntimeException
     {
-        if (!(item instanceof AbstractProject)) {
-            RuntimeException e = new RuntimeException(
-                String.format("Error: Not %s, Job: %s", item.getClass().getName(), name()));
-            logger.throwing(JenkinsJob.class.getName(), "build", e);
-            throw e;
-        }
-
-        ((AbstractProject) item).scheduleBuild(
+        item.scheduleBuild(
             0,
             cause,
             new ParametersAction(buildParameters()));
@@ -72,21 +72,17 @@ public class JenkinsJob
 
     public boolean isDisabled()
     {
-        if (item instanceof AbstractProject) {
-            return ((AbstractProject) item).isDisabled();
-        }
-        return false;
+        return item.isDisabled();
     }
 
     public Date getLastBuildDate()
     {
-        if (item instanceof AbstractProject) {
-            AbstractBuild lastBuild = ((AbstractProject) item).getLastBuild();
+        AbstractBuild lastBuild = item.getLastBuild();
 
-            if (null != lastBuild) {
-                return lastBuild.getTime();
-            }
+        if (null != lastBuild) {
+            return lastBuild.getTime();
         }
+
         return null;
     }
 
