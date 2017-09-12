@@ -26,7 +26,7 @@ public class TriglavJob
     private final PollingTriglavTrigger.Parameters parameters;
     private final TriglavClient client;
 
-    private Map<String, String> currentMassage;
+    private Map<String, String> currentMessage;
 
     public TriglavJob(PollingTriglavTrigger.Parameters parameters, TriglavClient client)
     {
@@ -44,9 +44,9 @@ public class TriglavJob
         return parameters.jobMessageOffset();
     }
 
-    public Map<String, String> currentMassage()
+    public Map<String, String> currentMessage()
     {
-        return currentMassage;
+        return currentMessage;
     }
 
     public void setId(String id)
@@ -135,10 +135,10 @@ public class TriglavJob
     {
         Optional<ImmutableMap<String, String>> optional = consumeIfPossible();
         if (!optional.isPresent()) {
-            currentMassage = null;
+            currentMessage = null;
             return false;
         }
-        currentMassage = optional.get();
+        currentMessage = optional.get();
         return true;
     }
 

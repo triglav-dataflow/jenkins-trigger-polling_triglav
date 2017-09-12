@@ -76,7 +76,6 @@ public class TriglavResourceConfig
     public static final class ConverterImpl
             extends RobustReflectionConverter
     {
-
         /**
          * Class constructor.
          *
@@ -84,7 +83,8 @@ public class TriglavResourceConfig
          *          the mapper
          */
         @SuppressWarnings("unused")
-        public ConverterImpl(Mapper mapper) {
+        public ConverterImpl(Mapper mapper)
+        {
             super(mapper, new PureJavaReflectionProvider());
         }
     }
@@ -99,7 +99,8 @@ public class TriglavResourceConfig
         }
 
         @Override
-        public boolean configure(StaplerRequest req, JSONObject formData) throws FormException {
+        public boolean configure(StaplerRequest req, JSONObject formData) throws FormException
+        {
             req.bindJSON(this, formData);
             save();
             return super.configure(req, formData);

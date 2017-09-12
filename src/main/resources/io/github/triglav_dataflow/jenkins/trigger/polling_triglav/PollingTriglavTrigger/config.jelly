@@ -33,6 +33,9 @@
   <f:entry title="Time Unit" field="timeUnit">
     <f:select/>
   </f:entry>
+  <f:entry title="Alternative Execution Time" field="alternativeExecutionTime">
+    <f:textbox value="${it.alternativeExecutionTime}"/>
+  </f:entry>
   <f:entry title="Logical Operator" field="logicalOp">
     <f:select/>
   </f:entry>
