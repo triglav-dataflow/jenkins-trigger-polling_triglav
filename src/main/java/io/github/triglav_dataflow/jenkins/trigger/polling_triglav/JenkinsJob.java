@@ -24,7 +24,7 @@ public class JenkinsJob
     {
         if (!(item instanceof AbstractProject)) {
             IllegalArgumentException e = new IllegalArgumentException(
-                String.format("Error: Expected instance of %s, but got %s. Job: %s", AbstractProject.class.getName(), item.getClass().getName(), name()));
+                String.format("Error: Expected instance of %s, but got %s. Job: %s", AbstractProject.class.getName(), item.getClass().getName(), item.getFullName()));
             logger.throwing(JenkinsJob.class.getName(), "build", e);
             throw e;
         }
