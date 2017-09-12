@@ -17,7 +17,7 @@ Jenkins Plugin For [Triglav](https://github.com/sonots/triglav).
 - **Job Message Offset (ReadOnly)**: Job Message Offset which the job consumed. Users cannot configure this value.
 - **Time Zone**: Time Zone of resources.
 - **Time Unit**: Time Unit of resources.
-- **Alternative Execution Time**: Optional time limit at which the Jenkins Project will be build (without parameters from Triglav) if there has been no execution since the last period. Accepts `mm` format when **Time Unit** is `hourly` and `HH:mm` format when **Time Unit** is `daily`. It will be ignored if **Time Unit** is set to `singular` or if the format is not correct. The Project will be built again after the time limit build if Triglav triggers it.
+- **Alternative Execution Time**: Optional time limit when the Jenkins Project will be built (without parameters from Triglav) if there has been no execution since the last period. Accepts `mm` format when **Time Unit** is `hourly` and `HH:mm` format when **Time Unit** is `daily`. It will be ignored if **Time Unit** is set to `singular` or if the format is not correct. The Project will be built again even after the time limit if Triglav triggers it.
 - **Logical Operator**: Logical Operator for which Triglav uses in monitoring resources. `and` or `or` is available.
 - **Span In Days**: Monitoring span in days. (Default: 32)
 - **Resources**:
